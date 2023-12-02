@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  ollama:
+    # https://github.com/jmorganca/ollama/issues/797#issuecomment-1764687661
+    image: ollama/ollama:latest
+    restart: always
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - llm_internal
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all 
+              capabilities: [ gpu ]
+  # 
+  # pgvector:
+  #   image: ankane/pgvector:v0.5.1
+  #   restart: always
+  #   env_file:
+  #     - .env.docker
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - langchain-vector-store:/var/lib/postgresql/data
+  #   networks:
+  #     - llm_internal
+  # 
+  # test:
+  #   image: nvidia/cuda:12.3.0-base-ubuntu22.04
+  #   command: nvidia-smi
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             capabilities: [gpu]
+
+volumes:
+  ollama:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/var/local/volumes/ollama/data'
+    external: false
+  langchain-vector-store:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/var/local/volumes/langchain-vector-store/data'
+    external: false
+
+networks:
+  llm_internal:
+    driver: bridge
