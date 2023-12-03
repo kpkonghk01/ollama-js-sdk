@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
 import { z } from "zod";
-import { ReadableStream } from "stream/web";
+// import { ReadableStream } from "stream/web";
 import type { Command } from "../interfaces/Command.js";
 import { OllamaError } from "../errors/OllamaError.js";
 import { OptionsSchema, type Options } from "../types/Options.js";

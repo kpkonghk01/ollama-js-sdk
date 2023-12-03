@@ -1,6 +1,7 @@
-import { createTemplate } from "/dist/utils/createTemplate.js";
-import OllamaClient from "/dist/OllamaClient.js";
-import { GenerateCommand } from "/dist/commands/GenerateCommand.js";
+import OllamaClient, { commands, utils } from "/dist/index.js";
+
+const { GenerateCommand } = commands;
+const { createTemplate } = utils;
 
 let responding = false;
 
@@ -20,7 +21,7 @@ async function generateCompletion(prompt, history) {
     new GenerateCommand({
       model,
       prompt,
-      stream: true,
+      // stream: true,
     })
   );
 
