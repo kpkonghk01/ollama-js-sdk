@@ -1,10 +1,10 @@
 import type { AxiosInstance } from "axios";
-import { IncomingMessage } from "http";
 import { z } from "zod";
 import { ReadableStream } from "stream/web";
 import type { Command } from "../interfaces/Command.js";
 import { OllamaError } from "../errors/OllamaError.js";
 import { OptionsSchema, type Options } from "../types/Options.js";
+import type { IncomingMessage } from "http";
 
 // Request
 export const formats = ["json"] as const;

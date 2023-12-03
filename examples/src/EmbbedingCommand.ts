@@ -1,8 +1,8 @@
-import OllamaClient from "../OllamaClient.js";
+import OllamaClient from "../../dist/OllamaClient.js";
 import {
   EmbeddingCommand,
   type EmbeddingRequest,
-} from "../commands/EmbeddingCommand.js";
+} from "../../dist/commands/EmbeddingCommand.js";
 
 const OLLAMA_HOST = "http://localhost:11434";
 

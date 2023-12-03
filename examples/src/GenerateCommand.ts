@@ -1,8 +1,8 @@
-import OllamaClient from "../OllamaClient.js";
+import OllamaClient from "../../dist/OllamaClient.js";
 import {
   GenerateCommand,
   isGenerateResponseStream,
-} from "../commands/GenerateCommand.js";
+} from "../../dist/commands/GenerateCommand.js";
 
 const OLLAMA_HOST = "http://localhost:11434";
 

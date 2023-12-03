@@ -6,18 +6,18 @@
     "target": "ESNext",
     "verbatimModuleSyntax": true,
     "allowJs": true,
+    "declaration": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "dom"],
     "rootDirs": ["src"],
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "include": ["src/**/*.ts", "node_modules"],
   "ts-node": {
     "esm": true
   }
