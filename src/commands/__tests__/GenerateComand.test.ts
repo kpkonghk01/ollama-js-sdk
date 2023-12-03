@@ -16,6 +16,7 @@ describe("GenerateCommand", () => {
   const request: GenerateRequest = {
     model: "testModel",
     prompt: "testPrompt",
+    stream: false,
   };
 
   beforeEach(() => {
