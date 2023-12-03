@@ -85,7 +85,7 @@ export class GenerateCommand
       options: this.options,
     };
 
-    if (payload.stream) {
+    if (payload.stream || payload.stream === undefined) {
       const resp = await client.post<IncomingMessage>(
         "/api/generate",
         payload,

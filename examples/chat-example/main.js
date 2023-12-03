@@ -21,30 +21,17 @@ async function generateCompletion(prompt, history) {
     new GenerateCommand({
       model,
       prompt,
-      // stream: true,
+      stream: false,
     })
   );
 
-  const reader = data.getReader();
+  responding = false;
 
-  function process() {
-    reader.read().then(({ done, value }) => {
-      if (done) {
-        responding = false;
-        history.push({
-          role: "assistant",
-          response: $lastAIMsg.textContent,
-        });
-        return;
-      }
-
-      $lastAIMsg.textContent += value.response;
-
-      process();
-    });
-  }
-
-  process();
+  $lastAIMsg.textContent += data.response;
+  history.push({
+    role: "assistant",
+    response: $lastAIMsg.textContent,
+  });
 }
 
 const toPrompt = createTemplate`You're an AI assistant.
