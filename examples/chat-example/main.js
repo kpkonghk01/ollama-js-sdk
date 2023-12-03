@@ -34,17 +34,20 @@ async function generateCompletion(prompt, history) {
   });
 }
 
-const toPrompt = createTemplate`You're an AI assistant.
-Given the previous chat history, please answer the User's last question.
-
-Here is the chat history:
-----------
-${"chatHistory"}
-----------
+const context = `「龍蝦三爭霸」的故事中，李嚴與小當家展開龍蝦3吃對決，當比到炸蝦項目時，做了3隻炸蝦卻少掉了搭配醬汁，被小當家羞辱「所以我說那個醬汁呢？」、「沒有完成的料理，根本沒有必要試吃！」
+作者為李嚴解釋，「他已經做好醬汁了，只是被小當家的做菜速度快到傻眼，被嚇到忘了醬汁」，同時作者小川悅司也很意外，台灣讀者關注的點在這裡，「在日本完全沒有讀者注意這個部分，台灣朋友的喜好真的很特別。」
+對此，網友們對這樣的真相笑翻，「所以還是沒醬汁啊」、「醬汁帶來了嗎」、「給李嚴一罐醬汁好嗎」、「被小屁孩嘴到忘記有醬汁？」、「小當家根本不給他說話的機會啊」、「錯了，應該要問作者：為什麼小當家炸一隻，李嚴要炸三隻」。`;
+const toPrompt = createTemplate`你是一位人工智慧助理。
+以下是本對話的背景資料：
+---------
+${"context"}
+---------
+如果問題與上述資料有關，請嚴格遵循上述資訊，不要使用任何先前的知識來回答使用者的問題。
+如果問題與上述資料無關，請使用您的知識來回答使用者的問題。
 </s>
-
+${"chatHistory"}
 USER: ${"question"}</s>
-ASSISTANT:
+ASSISTANT: 
 `;
 
 const toAIComponent = createTemplate`<div class="container message message-ai">
@@ -96,7 +99,7 @@ $form.addEventListener("submit", (event) => {
   const question = $input.value;
   appendUserMsg(question);
 
-  const prompt = toPrompt({ chatHistory, question });
+  const prompt = toPrompt({ chatHistory, context, question });
   chatHistory.push({
     role: "user",
     content: question,
