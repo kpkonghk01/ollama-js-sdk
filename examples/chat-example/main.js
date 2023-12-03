@@ -30,7 +30,7 @@ async function generateCompletion(prompt, history) {
   $lastAIMsg.textContent += data.response;
   history.push({
     role: "assistant",
-    response: $lastAIMsg.textContent,
+    content: $lastAIMsg.textContent,
   });
 }
 
