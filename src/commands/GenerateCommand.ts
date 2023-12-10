@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { Command } from "../interfaces/Command.js";
 import { OllamaError } from "../errors/OllamaError.js";
 import { OptionsSchema, type Options } from "../types/Options.js";
-import type { IncomingMessage } from "http";
+import { IncomingMessage } from "http";
 
 // Request
 export const formats = ["json"] as const;
@@ -94,42 +94,62 @@ export class GenerateCommand
         }
       );
 
-      const stream = new ReadableStream({
-        start(controller) {
-          resp.data.on("data", (chunk: Buffer) => {
-            try {
-              const data = chunk.toString();
-              const parsed = GenerateResponseSchema.safeParse(JSON.parse(data));
-
-              if (!parsed.success) {
-                controller.error(
-                  new OllamaError(
-                    "Cannot parse Ollama response",
-                    parsed.error.errors
-                  )
+      if (
+        resp.data instanceof ReadableStream ||
+        resp.data instanceof IncomingMessage
+      ) {
+        const stream = new ReadableStream({
+          start(controller) {
+            resp.data.on("data", (chunk: Buffer) => {
+              try {
+                const data = chunk.toString();
+                const parsed = GenerateResponseSchema.safeParse(
+                  JSON.parse(data)
                 );
 
-                return;
+                if (!parsed.success) {
+                  controller.error(
+                    new OllamaError(
+                      "Cannot parse Ollama response",
+                      parsed.error.errors
+                    )
+                  );
+
+                  return;
+                }
+
+                controller.enqueue(parsed.data);
+              } catch (error) {
+                controller.error(
+                  new OllamaError("Ollama response is not JSON")
+                );
               }
+            });
 
-              controller.enqueue(parsed.data);
-            } catch (error) {
-              controller.error(new OllamaError("Ollama response is not JSON"));
-            }
-          });
+            resp.data.on("end", () => {
+              controller.close();
+            });
 
-          resp.data.on("end", () => {
-            controller.close();
-          });
+            resp.data.on("error", (error) => {
+              console.error(error.message);
+              controller.error(new OllamaError("Ollama upstream error"));
+            });
+          },
+        }) as GenerateResponseStream;
 
-          resp.data.on("error", (error) => {
-            console.error(error.message);
-            controller.error(new OllamaError("Ollama upstream error"));
-          });
-        },
-      }) as GenerateResponseStream;
+        return stream;
+      }
 
-      return stream;
+      const parsed = GenerateResponseSchema.safeParse(resp.data);
+
+      if (!parsed.success) {
+        throw new OllamaError(
+          "Cannot parse generate response",
+          parsed.error.errors
+        );
+      }
+
+      return parsed.data;
     } else {
       const resp = await client.post<GenerateResponse>(
         "/api/generate",

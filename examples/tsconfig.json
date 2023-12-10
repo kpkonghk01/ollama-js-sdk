@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "lib": ["ESNext", "dom"],
+    "rootDirs": ["src"],
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts", "../src/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules"],
+  "ts-node": {
+    "esm": true
+  }
+}
