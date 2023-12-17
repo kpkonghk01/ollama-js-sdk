@@ -1,6 +1,9 @@
 # dependencies
 node_modules/
 
+# data
+examples/src/article-tag-suggestion/raw/articles
+
 # testing
 coverage/
 
